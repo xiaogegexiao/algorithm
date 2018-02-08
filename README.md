@@ -1,4 +1,4 @@
-# algorithm
+# Algorithm
 Algorithms collections
 
 Algorithms answers and summary for lintcode/leetcode
