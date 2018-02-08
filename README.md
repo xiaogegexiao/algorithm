@@ -5,9 +5,11 @@ Algorithms answers and summary for lintcode/leetcode
 
 Please open this with Intellij and compile & run test
 
-The algorithm questions contains
+The algorithm questions include these kinds of questions
 
-```1, General algorithm
+```
+
+1, General algorithm
 
 2, Binary search
 
@@ -23,4 +25,6 @@ The algorithm questions contains
 
 8, Data Structure
 
-9, Dynamic programming```
+9, Dynamic programming
+
+```
