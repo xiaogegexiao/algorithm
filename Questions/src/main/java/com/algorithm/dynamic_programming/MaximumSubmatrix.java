@@ -41,57 +41,32 @@ public class MaximumSubmatrix implements AlgorithmQuestion {
         }
 
         int height = matrix.length;
-        int width = matrix.length;
+        int width = matrix[0].length;
 
         int[][] horizonSum = new int[height][width];
-        int[][] verticalSum = new int[height][width];
-        int[][] totalSum = new int[height][width];
-        int[][] preMimMat = new int[height][width];
-
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (j == 0) {
-                    horizonSum[i][0] = matrix[i][0];
+                    horizonSum[i][j] = matrix[i][j];
                 } else {
-                    horizonSum[i][j] = horizonSum[i][j - 1] + matrix[i][j];
+                    horizonSum[i][j] = matrix[i][j] + horizonSum[i][j - 1];
                 }
             }
         }
 
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                if (j == 0) {
-                    verticalSum[0][i] = matrix[0][i];
-                } else {
-                    verticalSum[j][i] = verticalSum[j - 1][i] + matrix[j][i];
-                }
-            }
-        }
-
-        totalSum[0][0] = matrix[0][0];
-        preMimMat[0][0] = Math.min(0, matrix[0][0]);
-
+        int l = 0;
+        int r = 0;
+        int row = 0;
         int result = Integer.MIN_VALUE;
-        for (int step = 1; step < width; step++) {
-            for (int i = 0; i <= step; i++) {
-                int j = step - i;
-                if (i == 0) {
-                    totalSum[i][j] = horizonSum[i][j];
-                    result = Math.max(result, totalSum[i][j] - preMimMat[i][j - 1]);
-                    preMimMat[i][j] = Math.min(totalSum[i][j], preMimMat[i][j - 1]);
-                } else if (j == 0) {
-                    totalSum[i][j] = verticalSum[i][j];
-                    result = Math.max(result, totalSum[i][j] - preMimMat[i - 1][j]);
-                    preMimMat[i][j] = Math.min(totalSum[i][j], preMimMat[i - 1][j]);
-                } else {
-                    totalSum[i][j] = totalSum[i - 1][j - 1] + horizonSum[i][j] + verticalSum[i][j] - matrix[i][j];
-                    result = Math.max(result, totalSum[i][j] - preMimMat[i - 1][j - 1]);
-                    result = Math.max(result, totalSum[i][j] - preMimMat[i][j - 1]);
-                    result = Math.max(result, totalSum[i][j] - preMimMat[i - 1][j]);
-
-                    preMimMat[i][j] = Math.min(totalSum[i][j], preMimMat[i - 1][j]);
-                    preMimMat[i][j] = Math.min(totalSum[i][j], preMimMat[i][j - 1]);
-                    preMimMat[i][j] = Math.min(totalSum[i][j], preMimMat[i - 1][j - 1]);
+        for (; l < width; l++) {
+            for (r = l; r < width; r++) {
+                int sum = 0;
+                int minPre = 0;
+                for (row = 0; row < height; row++) {
+                    int oldSum = sum;
+                    sum += (l == 0) ? horizonSum[row][r] : (horizonSum[row][r] - horizonSum[row][l - 1]);
+                    result = Math.max(result, sum - minPre);
+                    minPre = Math.min(minPre, sum);
                 }
             }
         }
