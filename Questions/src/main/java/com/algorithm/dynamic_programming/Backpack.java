@@ -28,26 +28,50 @@ public class Backpack implements AlgorithmQuestion {
      * @param A: Given n items with size A[i]
      * @return: The maximum size
      */
+//    public int backPack(int m, int[] A) {
+//        if (m <= 0 || A == null || A.length == 0) {
+//            return 0;
+//        }
+//
+//        boolean[][] path = new boolean[A.length + 1][m + 1];
+//        path[0][0] = true;
+//
+//        for (int i = 1; i <= A.length; i++) {
+//            for (int j = 0; j <= m; j++) {
+//                path[i][j] = path[i - 1][j];
+//                if (j >= A[i - 1] && path[i - 1][j - A[i - 1]]) {
+//                    path[i][j] = true;
+//                }
+//            }
+//        }
+//        int result = 0;
+//        for (int i = 0; i <= m; i++) {
+//            if (path[A.length][i]) {
+//                result = i;
+//            }
+//        }
+//        return result;
+//    }
+
+    // use O(m) space
     public int backPack(int m, int[] A) {
         if (m <= 0 || A == null || A.length == 0) {
             return 0;
         }
 
-        boolean[][] path = new boolean[A.length + 1][m + 1];
-        path[0][0] = true;
+        boolean[] dp = new boolean[m + 1];
+        dp[0] = true;
 
-        for (int i = 1; i <= A.length; i++) {
-            for (int j = 0; j <= m; j++) {
-                path[i][j] = path[i - 1][j];
-                if (j >= A[i - 1] && path[i - 1][j - A[i - 1]]) {
-                    path[i][j] = true;
-                }
+        for (int aInt : A) {
+            for (int i = m; i >= aInt; i--) {
+                dp[i] |= dp[i - aInt];
             }
         }
         int result = 0;
-        for (int i = 0; i <= m; i++) {
-            if (path[A.length][i]) {
+        for (int i = m; i >= 0; i--) {
+            if (dp[i]) {
                 result = i;
+                break;
             }
         }
         return result;
