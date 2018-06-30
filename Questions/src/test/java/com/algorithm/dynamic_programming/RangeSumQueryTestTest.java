@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
 
-public class RangeSumQueryTest {
+public class RangeSumQueryTestTest {
     @Test
     public void test() {
         RangeSumQuery rangeSumQuery = new RangeSumQuery();

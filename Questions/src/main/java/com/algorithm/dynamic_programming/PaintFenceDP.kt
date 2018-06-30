@@ -38,6 +38,8 @@ class PaintFenceDP : AlgorithmQuestion{
         }
         return if (n == 3) {
             k * (k - 1 + (k - 1) * k)
-        } else k * numWays(n - 1, k) - numWays(n - 3, k) * (k - 1)
+        } else {
+            k * numWays(n - 1, k) - numWays(n - 3, k) * (k - 1)
+        }
     }
 }
