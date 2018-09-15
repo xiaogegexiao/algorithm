@@ -2,6 +2,10 @@ package com.algorithm.datastructure
 
 import com.algorithm.AlgorithmQuestion
 import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
+
+
 
 
 class GroupAnagrams : AlgorithmQuestion {
@@ -24,58 +28,30 @@ class GroupAnagrams : AlgorithmQuestion {
     }
 
     fun groupAnagrams(strs: Array<String>): List<List<String>> {
-        val map = HashMap<NoOrderString, ArrayList<String>>()
-        for (str in strs) {
-            val sortedStr = NoOrderString(str)
-            map[sortedStr] = (map as Map<NoOrderString, ArrayList<String>>).getOrDefault(sortedStr, ArrayList())
-            map[sortedStr]!!.add(str)
-        }
+        val primeNums = intArrayOf(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101)
 
+        val map = HashMap<Int, MutableList<String>>()
+        for (str in strs) {
+            val hashCode = calcHashCode(str, primeNums)
+            val value = map.getOrDefault(hashCode, ArrayList())
+            value.add(str)
+            map[hashCode] = value
+        }
         val res = ArrayList<List<String>>()
-        res.addAll(map.values)
+        for (value in map.values) {
+            res.add(value)
+        }
         return res
     }
 
-    // private String sort(String str) {
-    //     char[] array = str.toCharArray();
-    //     Arrays.sort(array);
-    //     return new String(array);
-    // }
-
-    internal inner class NoOrderString(var value: String) {
-        var hashValue = 0
-        var map: MutableMap<Int, Int> = HashMap()
-
-        init {
-            for (i in 0 until value.length) {
-                hashValue += value[i].toInt()
-                map[value[i].toInt()] = (map as Map<Int, Int>).getOrDefault(value[i].toInt(), 0) + 1
-            }
+    fun calcHashCode(str: String?, primeNums: IntArray): Int {
+        var hashCode = 1
+        if (str == null) {
+            return hashCode
         }
-
-        override fun hashCode(): Int {
-            return hashValue
+        for (i in 0 until str.length) {
+            hashCode *= primeNums[str[i] - 'a']
         }
-
-        override fun equals(o: Any?): Boolean {
-            return if (o is NoOrderString) {
-                mapEquals(map, o.map)
-            } else {
-                false
-            }
-        }
-
-        private fun mapEquals(map1: Map<Int, Int>, map2: Map<Int, Int>): Boolean {
-            if (map1.size != map2.size) {
-                return false
-            } else {
-                for (key in map1.keys) {
-                    if (map1[key] != map2.getOrDefault(key, 0)) {
-                        return false
-                    }
-                }
-            }
-            return true
-        }
+        return hashCode
     }
 }
